@@ -5,6 +5,9 @@ import ast
 
 
 def get_settings():
+    """
+    Prettier plots and longer display
+    """
     plt.switch_backend('agg')
     plt.style.use('ggplot')
     plt.rcParams['figure.dpi'] = 300
@@ -15,35 +18,35 @@ def get_settings():
 
 
 def parse_arguments():
+    """
+    Read command line arguments
+    """
     parser = argparse.ArgumentParser(description='Process command line arguments.')
 
     # Define command line arguments
     parser.add_argument('--implementation', type=str, default="scipy")
     parser.add_argument('--algorithm', type=str, default="minimize")
+    parser.add_argument('--plot', type=int, default=1)
     parser.add_argument('--A', type=str, default="[[8, 1], [1, 3]]")
     parser.add_argument('--b', type=str, default="[2, 4]")
 
     # Parse the arguments
     args = parser.parse_args()
 
-    # Define variables from arguments
-    implementation = args.implementation
-    algorithm = args.algorithm
-
     # Safer than running eval() directly
     A = np.array(ast.literal_eval(args.A))
     b = np.array(ast.literal_eval(args.b))
 
-    assert implementation in ['manual', 'scipy'], "Implementation must be 'manual' or 'scipy'"
-    assert algorithm in ['minimize', 'lgmres'], "Algorithm must be 'minimize' or 'lmgres'"
+    assert args.implementation in ['manual', 'scipy'], "Implementation must be 'manual' or 'scipy'"
+    assert args.algorithm in ['minimize', 'lgmres'], "Algorithm must be 'minimize' or 'lmgres'"
 
     print('Configuration:')
-    print('Implementation:', implementation)
-    print('Algorithm:', algorithm)
+    print('Implementation:', args.implementation)
+    print('Algorithm:', args.algorithm)
     print('A:', A)
     print('b:', b)
 
-    return implementation, algorithm, A, b
+    return args.implementation, args.algorithm, A, b, args.plot
 
 
 def quadratic(x, A, b):
@@ -67,6 +70,9 @@ def quadratic(x, A, b):
 
 
 class Callback(object):
+    """
+    Store the value of x and the value of the function at x
+    """
     def __init__(self, A, b):
         self.x = list()
         self.vals = list()
@@ -80,5 +86,3 @@ class Callback(object):
     def set_as_array(self):
         self.x = np.array(self.x)
         self.vals = np.array(self.vals)
-        print('self.x', self.x)
-        print('self.vals', self.vals)

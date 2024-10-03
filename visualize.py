@@ -6,7 +6,9 @@ from utils import quadratic
 
 
 def surface_plot(A, b):
-
+    """
+    Plot the 3D surface for quadratic function defined by A and b.
+    """
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 
     # Create mesh
