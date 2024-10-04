@@ -30,8 +30,9 @@ def solve_lgmres(A, b):
 
     # Initial guess for x
     x0 = np.zeros(len(b))  # Modify based on b size
-
+  
     # Solve the system using lgmres with callback
+    
     solution, _ = lgmres(A, b, x0=x0, callback=callback, atol=0.0)  # Set atol to 0.0
     
     # Return the solution, Ax, and the callback values

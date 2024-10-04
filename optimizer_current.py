@@ -22,8 +22,6 @@ parser.add_argument("--b", type=str, help="Vector b as a numpy array string. Exa
 
 args = parser.parse_args()  
 
-
-
 def minimize_function(args):
 
     global implementation
@@ -70,10 +68,21 @@ def minimize_function(args):
         A = eval(args.A, {"np": np})
         b = eval(args.b, {"np": np})
     
+
+        callback_values = []
+        def callback(xk):
+            callback_values.append(np.copy(xk))  # Save intermediate values of x
+        
+        # Initial guess for x
+        x0 = np.zeros(len(b))  # Modify based on b size
     
-        solution = lgmres(A, b, x0=x0, callback=callback)
-        x = solution[0]
-        Success = (solution[1] == 0)
+        solution, info = lgmres(A, b, x0=x0, callback=callback, atol=0.0)
+        x=solution
+        
+        if info == 0:
+            success = 1  # Success when info == 0 (convergence)
+        else:
+            success = 0  # Failure when info != 0 (no convergence)
         value = np.dot(A, x) - b     
         
     else:
@@ -97,30 +106,10 @@ print("Minimizer: {}\tValue: {}".format(x, val))
 
 
 
-plot=1
+   
 
-A = eval(args.A, {"np": np})  # this not working for the case of function  need to fix this 
-b = eval(args.b, {"np": np})
+# The plotting the function based on the type of arguments passed by argparse,
+# we define the function to be plotted accordingly.
 
-# Plot the surface
-if plot:
-    
-    
-    
-    
-    
-    fig, ax = surface_plot(A, b)
-    # Plot the minimizer as a red dot
-    ax.scatter(x[0], x[1], val, color='red', s=100, label="Minimizer")
 
-    # Plot the trajectory in blue
-    callback.set_as_array()
-    ax.scatter(callback.x[:, 0], callback.x[:, 1], callback.vals, color='blue', s=50, label="Iterations")
-    ax.plot(callback.x[:, 0], callback.x[:, 1], callback.vals, color='blue', linewidth=2)
-    ax.legend()
-    plt.title("Implementation: {}, Algorithm: {}".format(implementation, algorithm))
-    plt.savefig('{}_{}.png'.format(implementation, algorithm), bbox_inches="tight")
-    
-
-    
 
