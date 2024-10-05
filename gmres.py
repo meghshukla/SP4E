@@ -48,7 +48,7 @@ def solve(A, b, x0, callback, k=10, tol=1e-6):
     
     # Arnoldi iteration
     for j in range(k):
-        print(j)
+        #print(j)
         Q[:, j+1] = matmul(A, Q[:, j][..., None]).squeeze()
         for i in range(j+1):
             H[i, j] = dot(Q[:, i], Q[:, j+1])

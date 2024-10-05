@@ -2,9 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-from utils import quadratic
-
-
 def surface_plot(func_to_plot):
     """
     Plot the 3D surface for quadratic function defined by A and b.
