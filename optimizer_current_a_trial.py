@@ -8,8 +8,6 @@ from utils import parse_arguments, get_settings, quadratic, Callback
 from visualize import surface_plot
 import gmres
 
-
-
 parser = argparse.ArgumentParser(description="Minimize a function S(x) or solve Ax = b using lgmres.")
 
 # Input for the function as a string
@@ -20,19 +18,25 @@ parser.add_argument("function", type=str, nargs="?", default=None,
 parser.add_argument("--A", type=str, help="Matrix A as a numpy array string. Example: 'np.array([[8, 1], [1, 3]])'")
 parser.add_argument("--b", type=str, help="Vector b as a numpy array string. Example: 'np.array([2, 4])'")
 
+# Option for choosing solution method when A and b are provided ('scipy' or 'manual')
+parser.add_argument("--solution", type=str, choices=['scipy', 'manual'], help="Choose the solution method: 'scipy' or 'manual'")
+
+# Add an option to ask the user if they want to plot the results
+parser.add_argument("--plot", action="store_true", help="If provided, the results will be plotted")
+
 args = parser.parse_args()  
 
+# Assign the value of the "plot" variable
+plot = args.plot  # This will be True if --plot is provided, False otherwise
 
 if args.function:
 
-    # that means the user is asking for function minimisation. Thus for the visualisation module to work appropriately as written by my co-worker I define the necessary variables
-    implementation ='scipy' 
-    algorithm ='minimize'
-
     def S(x):
-        return eval(args.function, {"np": np, "x": x})
-    
-    
+        if len(x.shape) > 1:  # Check if we have a 2D array of points
+            return np.array([eval(args.function, {"np": np, "x": xi}) for xi in x])
+        else:
+            return eval(args.function, {"np": np, "x": x})      
+        
     callback_values = []
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
@@ -46,43 +50,51 @@ if args.function:
     val=S(x)
     success = result.success
     
+    # definining the function to be plotted which will be fed to visualisation module.
+    plot_func=S
+    
     print(f"Minimized x: {x}")
     print(f"S(x) at the solution: {S(x)}")
     
-    
 
 elif args.A and args.b:
-    
-    
-    # that means the user is asking for the solution of the linear system of equation. Thus for the visualisation module to work appropriately as written by my co-worker I define the necessary variables
-    implementation ='scipy' 
-    algorithm ='lgmres'
-    
-    
+        
     # If A and b are provided, solve Ax = b
     A = eval(args.A, {"np": np})
     b = eval(args.b, {"np": np})
-
-
+    
+    
     callback_values = []
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
     
     # Initial guess for x
     x0 = np.zeros(len(b))  # Modify based on b size
-
-    solution, info = lgmres(A, b, x0=x0, callback=callback, atol=0.0)
-    x=solution
     
-    if info == 0:
-        success = 1  # Success when info == 0 (convergence)
-    else:
-        success = 0  # Failure when info != 0 (no convergence)
-    val = np.dot(A, x) - b     
+    # here, based on the solution approached asked by the user, we implement the algorithm
+    
+    if args.solution == 'scipy':
+
+        solution, info = lgmres(A, b, x0=x0, callback=callback, atol=0.0)
+        x=solution
+        
+        if info == 0:
+            success = 1  # Success when info == 0 (convergence)
+        else:
+            success = 0  # Failure when info != 0 (no convergence)
+            
+    elif args.solution == 'manual':
+            
+        solution = gmres.solve(A, b, x0=x0, callback=callback)
+        x = solution[0]
+        success = (solution[1] == 0)        
+         
+    val = np.dot(A, x) - b 
+    
+    plot_func = lambda x: quadratic(x, A, b) # defining the plotting function using lambda so that the "quadratic" function takes x as a variable.
     
 else:
     raise Exception("Invalid choice of implementation or algorithm.")    
-
 
 
 if success:
@@ -92,24 +104,25 @@ else:
 
 print("Minimizer: {}\tValue: {}".format(x, val))
 
-# The plotting the function based on the type of arguments passed by argparse,
-# we define the function to be plotted accordingly.
-
-plot=1
-
 
 # Plot the surface
 if plot:
-    fig, ax = surface_plot(A, b)
-    # Plot the minimizer as a red dot
-    ax.scatter(x[0], x[1], val, color='red', s=100, label="Minimizer")
+    fig, ax = surface_plot(plot_func)
 
+    # Convert callback_values to an array for plotting
+    callback_array = np.array(callback_values)
+    
+    # Plot the minimizer as a red dot
+    ax.scatter(x[0], x[1], color='red', s=100, label="Minimizer")
+    print(callback_array)
     # Plot the trajectory in blue
-    callback.set_as_array()
-    ax.scatter(callback.x[:, 0], callback.x[:, 1], callback.vals, color='blue', s=50, label="Iterations")
-    ax.plot(callback.x[:, 0], callback.x[:, 1], callback.vals, color='blue', linewidth=2)
+    if len(callback_array) > 0:
+        ax.scatter(callback_array[:, 0], callback_array[:, 1], color='blue', s=50, label="Iterations")
+        ax.plot(callback_array[:, 0], callback_array[:, 1], color='blue', linewidth=2)
+
     ax.legend()
-    plt.title("Implementation: {}, Algorithm: {}".format(implementation, algorithm))
-    plt.savefig('{}_{}.png'.format(implementation, algorithm), bbox_inches="tight")
+    plt.title("Function Optimisation with Iteration Steps")
+    plt.savefig('Function Optimisation with Iteration Steps".png', bbox_inches="tight")
+    plt.show()
 
 

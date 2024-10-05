@@ -5,7 +5,7 @@ from matplotlib import cm
 from utils import quadratic
 
 
-def surface_plot(A, b):
+def surface_plot(func_to_plot):
     """
     Plot the 3D surface for quadratic function defined by A and b.
     """
@@ -18,7 +18,7 @@ def surface_plot(A, b):
     
     # Compute quadratic function
     XY = np.array([X.flatten(), Y.flatten()]).T
-    Z = quadratic(XY, A, b).reshape(X.shape)
+    Z = func_to_plot(XY).reshape(X.shape)   
 
     # Plot the surface.
     surface = ax.plot_surface(
