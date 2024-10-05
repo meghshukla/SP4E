@@ -1,53 +1,31 @@
-from matplotlib import pyplot as plt
 import numpy as np
 import argparse
-import ast
-
-
-def get_settings():
-    """
-    Prettier plots and longer display
-    """
-    plt.switch_backend('agg')
-    plt.style.use('ggplot')
-    plt.rcParams['figure.dpi'] = 300
-
-    #To print out the entire matrix
-    np.set_printoptions(precision=4)
-    np.set_printoptions(linewidth=200)
 
 
 def parse_arguments():
     """
     Read command line arguments
     """
-    parser = argparse.ArgumentParser(description='Process command line arguments.')
+    
+    parser = argparse.ArgumentParser(description="Minimize a function S(x) or solve Ax = b using lgmres.")
+    
+    # Input for the function as a string (the option for minimizing the function S(x))
+    parser.add_argument("function", type=str, nargs="?", default=None,
+                        help="The function S(x) to minimize as a string. Example: '0.5 * np.dot(x.T, np.dot(np.array([[8, 1], [1, 3]]), x)) - np.dot(np.array([2, 4]), x)'")
+    
+    # Input for A and b as numpy arrays (the option for solving Ax=b)
+    parser.add_argument("--A", type=str, help="Matrix A as a numpy array string. Example: 'np.array([[8, 1], [1, 3]])'")
+    parser.add_argument("--b", type=str, help="Vector b as a numpy array string. Example: 'np.array([2, 4])'")
+    
+    # Option for choosing solution method when A and b are provided ('scipy' or 'manual')
+    parser.add_argument("--solution", type=str, choices=['scipy', 'manual'], help="Choose the solution method: 'scipy' or 'manual'")
+    
+    # Adding an option to ask the user if they want to plot the results
+    parser.add_argument("--plot", action="store_true", help="If provided, the results will be plotted")
+    
+    args = parser.parse_args()  
 
-    # Define command line arguments
-    parser.add_argument('--implementation', type=str, default="scipy")
-    parser.add_argument('--algorithm', type=str, default="minimize")
-    parser.add_argument('--plot', type=int, default=1)
-    parser.add_argument('--A', type=str, default="[[8, 1], [1, 3]]")
-    parser.add_argument('--b', type=str, default="[2, 4]")
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    # Safer than running eval() directly
-    A = np.array(ast.literal_eval(args.A))
-    b = np.array(ast.literal_eval(args.b))
-
-    assert args.implementation in ['manual', 'scipy'], "Implementation must be 'manual' or 'scipy'"
-    assert args.algorithm in ['minimize', 'lgmres'], "Algorithm must be 'minimize' or 'lmgres'"
-
-    print('Configuration:')
-    print('Implementation:', args.implementation)
-    print('Algorithm:', args.algorithm)
-    print('A:', A)
-    print('b:', b)
-
-    return args.implementation, args.algorithm, A, b, args.plot
-
+    return args
 
 def quadratic(x, A, b):
     """
@@ -67,22 +45,3 @@ def quadratic(x, A, b):
 
     value = (0.5 * xAx) - bx
     return value.squeeze()
-
-
-class Callback(object):
-    """
-    Store the value of x and the value of the function at x
-    """
-    def __init__(self, A, b):
-        self.x = list()
-        self.vals = list()
-        self.A = A
-        self.b = b
-
-    def __call__(self, x):
-        self.x.append(x)
-        self.vals.append(quadratic(x, self.A, self.b))
-
-    def set_as_array(self):
-        self.x = np.array(self.x)
-        self.vals = np.array(self.vals)

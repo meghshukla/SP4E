@@ -2,34 +2,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.optimize import minimize
 from scipy.sparse.linalg import lgmres
-import argparse
 
-from utils import parse_arguments, get_settings, quadratic, Callback
+from utils import quadratic, parse_arguments
 from visualize import surface_plot
 import gmres
 
-parser = argparse.ArgumentParser(description="Minimize a function S(x) or solve Ax = b using lgmres.")
-
-# Input for the function as a string
-parser.add_argument("function", type=str, nargs="?", default=None,
-                    help="The function S(x) to minimize as a string. Example: '0.5 * np.dot(x.T, np.dot(np.array([[8, 1], [1, 3]]), x)) - np.dot(np.array([2, 4]), x)'")
-
-# Input for A and b as numpy arrays (optional if solving Ax=b)
-parser.add_argument("--A", type=str, help="Matrix A as a numpy array string. Example: 'np.array([[8, 1], [1, 3]])'")
-parser.add_argument("--b", type=str, help="Vector b as a numpy array string. Example: 'np.array([2, 4])'")
-
-# Option for choosing solution method when A and b are provided ('scipy' or 'manual')
-parser.add_argument("--solution", type=str, choices=['scipy', 'manual'], help="Choose the solution method: 'scipy' or 'manual'")
-
-# Add an option to ask the user if they want to plot the results
-parser.add_argument("--plot", action="store_true", help="If provided, the results will be plotted")
-
-args = parser.parse_args()  
-
+args = parse_arguments()
+    
 # Assign the value of the "plot" variable
 plot = args.plot  # This will be True if --plot is provided, False otherwise
 
-if args.function:
+if args.function:  # this is the case where the user provides a function.
 
     def S(x):
         if len(x.shape) > 1:  # Check if we have a 2D array of points
@@ -41,7 +24,7 @@ if args.function:
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
         
-    x0 = np.zeros(2)  # Modify size based on your problem
+    x0 = np.zeros(2)  # Initial guess for the minimization algorithm
 
 
     # Minimize S(x) with callback
@@ -63,7 +46,8 @@ if args.function:
     
     
 
-elif args.A and args.b:
+elif args.A and args.b:  # this is the case where the user provides A and b
+
         
     # If A and b are provided, solve Ax = b
     A = eval(args.A, {"np": np})
@@ -74,8 +58,7 @@ elif args.A and args.b:
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
     
-    # Initial guess for x
-    x0 = np.zeros(len(b))  # Modify based on b size
+    x0 = np.zeros(len(b)) # Initial guess for the minimization algorithm
     
     # here, based on the solution approached asked by the user, we implement the algorithm
     
@@ -107,7 +90,7 @@ elif args.A and args.b:
         implementation='manual'
         algorithm='gmres'
          
-    val = np.dot(A, x) - b 
+    val = np.dot(A, x) - b # this is the value, i.e, the residual attained for the solution x.
     plot_func = lambda x: quadratic(x, A, b) # defining the plotting function using lambda so that the "quadratic" function takes x as a variable.
     
 else:
