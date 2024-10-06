@@ -24,11 +24,12 @@ if args.function:  # this is the case where the user provides a function.
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
         
-    x0 = np.zeros(2)  # Initial guess for the minimization algorithm
+    x0 = np.zeros(2)+[5.,5.] # Initial guess for the minimization algorithm, the +5 is to make the inital guess
+    #far away from the solution so that more iterations are done for better investigation and plotting purposes.
 
 
     # Minimize S(x) with callback
-    result = minimize(S, x0, callback=callback)
+    result = minimize(S, x0, callback=callback)  # the default method is used as it seems it works well
     x = result.x
     val=S(x)
     success = result.success
@@ -58,7 +59,8 @@ elif args.A and args.b:  # this is the case where the user provides A and b
     def callback(xk):
         callback_values.append(np.copy(xk))  # Save intermediate values of x
     
-    x0 = np.zeros(len(b)) # Initial guess for the minimization algorithm
+    x0 = np.zeros(len(b))+[5.,5.] # Initial guess for the minimization algorithm, the +5 is to make the inital guess
+    #far away from the solution so that more iterations are done for better investigation and plotting purposes.
     
     # here, based on the solution approached asked by the user, we implement the algorithm
     
@@ -104,24 +106,30 @@ else:
 
 print("Minimizer: {}\tValue: {}".format(x, val))
 
+if plot:   # plotting the function if the user asked for it.
+    fig, ax = surface_plot(plot_func) # utilising te surface_plot from visualize.py
 
-# Plot the surface
-if plot:
-    fig, ax = surface_plot(plot_func)
-
+    # Plot the minimizer as a red dot
+    ax.scatter(x[0], x[1], plot_func(x), color='red', s=100, label="Minimizer")  # Now plotting with (x, y, z)
+    
+    # plotting the iteration trajectory.
+    
     # Convert callback_values to an array for plotting
     callback_array = np.array(callback_values)
     
-    # Plot the minimizer as a red dot
-    ax.scatter(x[0], x[1], color='red', s=100, label="Minimizer")
     # Plot the trajectory in blue
     if len(callback_array) > 0:
-        ax.scatter(callback_array[:, 0], callback_array[:, 1], color='blue', s=50, label="Iterations")
-        ax.plot(callback_array[:, 0], callback_array[:, 1], color='blue', linewidth=2)
+        # Compute the function values (z-coordinates) for each callback point
+        z_values = plot_func(callback_array)  # Compute z values for the trajectory
+        
+        # Plot the trajectory points (x, y, z)
+        ax.scatter(callback_array[:, 0], callback_array[:, 1], z_values, color='blue', s=50, label="Iterations")
+        
+        # Plot lines connecting the trajectory points
+        ax.plot(callback_array[:, 0], callback_array[:, 1], z_values, color='blue', linewidth=2)
 
     ax.legend()
     plt.title("Implementation: {}, Algorithm: {}".format(implementation, algorithm))
     plt.savefig('{}_{}.png'.format(implementation, algorithm), bbox_inches="tight")
     plt.show()
-
 

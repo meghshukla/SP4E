@@ -9,7 +9,7 @@ def surface_plot(func_to_plot):
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 
     # Create mesh
-    X = np.arange(-10, 10, 0.1)
+    X = np.arange(-10,10, 0.1)
     Y = np.arange(-10, 10, 0.1)
     X, Y = np.meshgrid(X, Y)
     

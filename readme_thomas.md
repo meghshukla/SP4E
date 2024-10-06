@@ -55,3 +55,5 @@ The case where A and b are given to the function. The A array is inputted after 
 ## Output
 
 We save a matplotlib plot containing the optimization surface, trajectory of the point, and optimized value. An example plot is in this repository with the name: ```manual_gmres.png``` 
+
+As can be seen, when we compare the plots for the case when the scipy optimisation methods is used ("minimize") and the case when the gmres algorithm is used, the latter is more efficient and faster in finding the optimal solution as it takes less steps to reach the solution.
