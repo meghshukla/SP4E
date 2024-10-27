@@ -1,0 +1,5 @@
+/home/thomashenzel/cse_for_mechanics/homework2/build/CMakeFiles/edit_cache.dir
+/home/thomashenzel/cse_for_mechanics/homework2/build/CMakeFiles/rebuild_cache.dir
+/home/thomashenzel/cse_for_mechanics/homework2/build/src/CMakeFiles/main_exec.dir
+/home/thomashenzel/cse_for_mechanics/homework2/build/src/CMakeFiles/edit_cache.dir
+/home/thomashenzel/cse_for_mechanics/homework2/build/src/CMakeFiles/rebuild_cache.dir

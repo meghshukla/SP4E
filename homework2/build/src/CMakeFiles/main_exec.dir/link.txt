@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/main_exec.dir/main.cc.o CMakeFiles/main_exec.dir/series.cc.o -o main_exec 
