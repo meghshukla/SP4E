@@ -16,3 +16,18 @@ double ComputePi::compute(unsigned int N) {
     }
     return std::sqrt(6 * sum);
 }
+
+// Constructor for RiemannIntegral
+RiemannIntegral::RiemannIntegral(double a, double b, std::function<double(double)> f)
+    : a(a), b(b), f(f) {}
+
+// Compute method for RiemannIntegral using Riemann sum
+double RiemannIntegral::compute(unsigned int N) {
+    double delta_x = (b - a) / N;
+    double sum = 0;
+    for (unsigned int i = 1; i <= N; ++i) {
+        double x_i = a + i * delta_x;
+        sum += f(x_i) * delta_x;
+    }
+    return sum;
+}
