@@ -78,36 +78,39 @@ int main(int argc, char* argv[]) {
         std::cout << "Invalid choice." << std::endl;
         return 1;
     }
-    //std::cout << (series->storedArray[0]) << std::endl;
+
     // Call compute on the chosen series and output the result
     double result = series->compute(N);
-    double resultSeries = series->computeSeries(N);
     std::cout << "Result with N = " << N << " is: " << result << std::endl;
-    std::cout << "Result with N (improved complexity) = " << N << " is: " << resultSeries << std::endl;
-    
-    // Print Series
-    if (output_mode == "screen") {
-        PrintSeries printSeries = PrintSeries(*series, 5);
-        printSeries.dump(std::cout);
-    }
 
-    // Write Series
-    else if (output_mode == "file") {
-        WriteSeries writer(*series, N);
+    if (choice != 3) {
+        double resultSeries = series->computeSeries(N);    
+        std::cout << "Result with N (improved complexity) = " << N << " is: " << resultSeries << std::endl;
+        
+        // Print Series
+        if (output_mode == "screen") {
+            PrintSeries printSeries = PrintSeries(*series, 5);
+            printSeries.dump(std::cout);
+        }
 
-        // Set separator and dump to file
-        writer.setSeparator(separator);
-        std::ofstream outFile("output.txt");
-        if (!outFile) {
-            std::cerr << "Error opening file: output.txt" << std::endl;
+        // Write Series
+        else if (output_mode == "file") {
+            WriteSeries writer(*series, N);
+
+            // Set separator and dump to file
+            writer.setSeparator(separator);
+            std::ofstream outFile("output.txt");
+            if (!outFile) {
+                std::cerr << "Error opening file: output.txt" << std::endl;
+                return 1;
+            }
+            outFile << writer;
+            outFile.close();
+        }
+        else {
+            std::cerr << "Invalid output mode." << std::endl;
             return 1;
         }
-        outFile << writer;
-        outFile.close();
-    }
-    else {
-        std::cerr << "Invalid output mode." << std::endl;
-        return 1;
     }
 
     return 0;
