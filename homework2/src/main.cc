@@ -1,35 +1,29 @@
 // src/main.cc
 #include <iostream>
+#include <sstream>
+#include <memory>
 #include "series.hh"
+#include "dumper_series.hh"
 
-int main() {
+int main(int argc, char* argv[]) {
 
+    // Should take in only threee arguments
+    if (argc < 3 || argc > 4) {
+        std::cerr << "Usage: " << argv[0] << " <N> <output_mode> [separator]" << std::endl;
+        return 1;
+    }
 
+    unsigned int N;
+    std::string output_mode;
+    char separator = ' ';
 
-/* the code below is the implementation of 2.2-2.5 
+    // Concatenate arguments and unstack them to variables
+    std::stringstream ss;
+    for (int i = 1; i < argc; ++i) {
+        ss << argv[i] << " ";
+    }
+    ss >> N >> output_mode >> separator;
 
-    // Testing ComputePi
-    ComputePi SeriesPi;
-    unsigned int N = 1000; // Example value for N
-    double piResult = SeriesPi.compute(N);
-    std::cout << "Approximation of pi with N = " << N << " is: " << piResult << std::endl;
-
-    // Testing ComputeArithmetic
-    ComputeArithmetic SeriesArithmetic;
-    double arithmeticResult = SeriesArithmetic.compute(N);
-    std::cout << "Sum of integers up to N = " << N << " is: " << arithmeticResult << std::endl;
-
-
-// end of 2.2-2.5 
-
-*/
-
-
-
-// the code below is the implementation of 2.6
-
-
-unsigned int N = 100000; // Example value for N
     int choice;
 
     std::cout << "Choose a series to compute:" << std::endl;
@@ -39,15 +33,16 @@ unsigned int N = 100000; // Example value for N
     std::cout << "Enter choice (1, 2, or 3): ";
     std::cin >> choice;
 
-    // Base class pointer
-    Series* series = nullptr;
+    std::unique_ptr<Series> series;
 
     // Allocate the correct derived class based on user choice
     if (choice == 1) {
-        series = new ComputeArithmetic();
-    } else if (choice == 2) {
-        series = new ComputePi();
-    } else if (choice == 3) {
+        series = std::make_unique<ComputeArithmetic>(N);
+    }
+    else if (choice == 2) {
+        series = std::make_unique<ComputePi>(N);
+    }
+    else if (choice == 3) {
         double a, b;
         int func_choice;
 
@@ -76,20 +71,44 @@ unsigned int N = 100000; // Example value for N
             return 1;
         }
 
-        series = new RiemannIntegral(a, b, f);
+        series = std::make_unique<RiemannIntegral>(a, b, f, N);
 
-    } else {
-    std::cout << "Invalid choice." << std::endl;
-    return 1;
     }
-
-
+    else {
+        std::cout << "Invalid choice." << std::endl;
+        return 1;
+    }
+    //std::cout << (series->storedArray[0]) << std::endl;
     // Call compute on the chosen series and output the result
     double result = series->compute(N);
+    double resultSeries = series->computeSeries(N);
     std::cout << "Result with N = " << N << " is: " << result << std::endl;
+    std::cout << "Result with N (improved complexity) = " << N << " is: " << resultSeries << std::endl;
+    
+    // Print Series
+    if (output_mode == "screen") {
+        PrintSeries printSeries = PrintSeries(*series, 5);
+        printSeries.dump(std::cout);
+    }
 
-    // Clean up dynamically allocated memory
-    delete series;
+    // Write Series
+    else if (output_mode == "file") {
+        WriteSeries writer(*series, N);
+
+        // Set separator and dump to file
+        writer.setSeparator(separator);
+        std::ofstream outFile("output.txt");
+        if (!outFile) {
+            std::cerr << "Error opening file: output.txt" << std::endl;
+            return 1;
+        }
+        outFile << writer;
+        outFile.close();
+    }
+    else {
+        std::cerr << "Invalid output mode." << std::endl;
+        return 1;
+    }
 
     return 0;
 }
