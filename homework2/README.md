@@ -36,6 +36,8 @@ The case where S(x) is given to the function, and plotting is also asked.
 
 The code also facilitates easy user interaction to produce pi, natural number and riemannian integral on the fly. Please follow the prompts on the screen for the same.
 
+Plotting can be done by specifying the file name: ```python plot.py output.csv```
+
 ## Exercise 2.1
 
 Thomas implemented exercise 1,2,6 and Megh did 3,4,5. The exercises 3,4,5 majorly involved Series printing/storing and fast computation whereas 2,6 majorly involved calculating the series for different functions.
