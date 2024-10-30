@@ -97,13 +97,33 @@ int main(int argc, char* argv[]) {
         else if (output_mode == "file") {
             WriteSeries writer(*series, N);
 
-            // Set separator and dump to file
+            // Set separator
             writer.setSeparator(separator);
-            std::ofstream outFile("output.txt");
+
+            // Determine the filename based on the separator
+            std::string filename;
+            switch (separator) {
+                case ',':
+                    filename = "output.csv";
+                    break;
+                case '|':
+                    filename = "output.psv";
+                    break;
+                case ' ':
+                case '\t':
+                default:
+                    filename = "output.txt";
+                    break;
+            }
+
+            // Open the output file
+            std::ofstream outFile(filename);
             if (!outFile) {
-                std::cerr << "Error opening file: output.txt" << std::endl;
+                std::cerr << "Error opening file: " << filename << std::endl;
                 return 1;
             }
+
+            // Write to the file
             outFile << writer;
             outFile.close();
         }
