@@ -50,5 +50,7 @@ Thomas implemented exercise 1,2,6 and Megh did 3,4,5. The exercises 3,4,5 majorl
 
 ## Exercise 6
 
+The pi should be input in radians to the function,i.e., 3.14159 for pi and 1.570797 for pi/2.
+
 Expected values for the integrals are achieved as the summation converges to the analytical prediction for all the three cases. For the first integral which is for the function x^3, the desired convergence is achieved around N=700. For the second integral for the cos(x) function, the desired convergence is achieved at around N=400. For the last integral of sin(x), the desired convergence is achieved around N=100.
 
