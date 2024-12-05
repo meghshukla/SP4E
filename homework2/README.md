@@ -36,6 +36,8 @@ The case where S(x) is given to the function, and plotting is also asked.
 
 The code also facilitates easy user interaction to produce pi, natural number and riemannian integral on the fly. Please follow the prompts on the screen for the same.
 
+Plotting can be done by specifying the file name: ```python plot.py output.csv```
+
 ## Exercise 2.1
 
 Thomas implemented exercise 1,2,6 and Megh did 3,4,5. The exercises 3,4,5 majorly involved Series printing/storing and fast computation whereas 2,6 majorly involved calculating the series for different functions.
@@ -50,9 +52,7 @@ Thomas implemented exercise 1,2,6 and Megh did 3,4,5. The exercises 3,4,5 majorl
 
 ## Exercise 6
 
-Explanations as comments will be added to the code for instance for the constructor and the difference in the structure of constructing computepi,sum and the integral which takes multiple inputs including a function.
+The pi should be input in radians to the function,i.e., 3.14159 for pi and 1.570797 for pi/2.
 
-The code is finalised in a manner that the user can choose either to compute the series of summation, pi , or the integral for a given function. If integral option is chosen, then the user choses among the options of the 3 functions as represented by numbers. Once the function is chosen then the code asks the user to input the limits.
-
-6.4 : Expected values are achieved, more detailed analysis will be done as asked.
+Expected values for the integrals are achieved as the summation converges to the analytical prediction for all the three cases. For the first integral which is for the function x^3, the desired convergence is achieved around N=700. For the second integral for the cos(x) function, the desired convergence is achieved at around N=400. For the last integral of sin(x), the desired convergence is achieved around N=100.
 

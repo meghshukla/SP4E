@@ -78,36 +78,59 @@ int main(int argc, char* argv[]) {
         std::cout << "Invalid choice." << std::endl;
         return 1;
     }
-    //std::cout << (series->storedArray[0]) << std::endl;
+
     // Call compute on the chosen series and output the result
     double result = series->compute(N);
-    double resultSeries = series->computeSeries(N);
     std::cout << "Result with N = " << N << " is: " << result << std::endl;
-    std::cout << "Result with N (improved complexity) = " << N << " is: " << resultSeries << std::endl;
-    
-    // Print Series
-    if (output_mode == "screen") {
-        PrintSeries printSeries = PrintSeries(*series, 5);
-        printSeries.dump(std::cout);
-    }
 
-    // Write Series
-    else if (output_mode == "file") {
-        WriteSeries writer(*series, N);
+    if (choice != 3) {
+        double resultSeries = series->computeSeries(N);    
+        std::cout << "Result with N (improved complexity) = " << N << " is: " << resultSeries << std::endl;
+        
+        // Print Series
+        if (output_mode == "screen") {
+            PrintSeries printSeries = PrintSeries(*series, 5);
+            printSeries.dump(std::cout);
+        }
 
-        // Set separator and dump to file
-        writer.setSeparator(separator);
-        std::ofstream outFile("output.txt");
-        if (!outFile) {
-            std::cerr << "Error opening file: output.txt" << std::endl;
+        // Write Series
+        else if (output_mode == "file") {
+            WriteSeries writer(*series, N);
+
+            // Set separator
+            writer.setSeparator(separator);
+
+            // Determine the filename based on the separator
+            std::string filename;
+            switch (separator) {
+                case ',':
+                    filename = "output.csv";
+                    break;
+                case '|':
+                    filename = "output.psv";
+                    break;
+                case ' ':
+                case '\t':
+                default:
+                    filename = "output.txt";
+                    break;
+            }
+
+            // Open the output file
+            std::ofstream outFile(filename);
+            if (!outFile) {
+                std::cerr << "Error opening file: " << filename << std::endl;
+                return 1;
+            }
+
+            // Write to the file
+            outFile << writer;
+            outFile.close();
+        }
+        else {
+            std::cerr << "Invalid output mode." << std::endl;
             return 1;
         }
-        outFile << writer;
-        outFile.close();
-    }
-    else {
-        std::cerr << "Invalid output mode." << std::endl;
-        return 1;
     }
 
     return 0;
