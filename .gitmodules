@@ -1,0 +1,3 @@
+[submodule "homework3/heat-fft-solver/starting_point/googletest"]
+	path = homework3/heat-fft-solver/starting_point/googletest
+	url = https://github.com/google/googletest.git
