@@ -11,6 +11,7 @@
 struct FFT {
   static Matrix<complex> transform(Matrix<complex>& m);
   static Matrix<complex> itransform(Matrix<complex>& m);
+  static Matrix<complex> computeFrequencies(int size);
 };
 
 /* ------------------------------------------------------ */
@@ -53,6 +54,25 @@ inline Matrix<complex> FFT::itransform(Matrix<complex>& m_in) {
 
     return m_out;
 }
+
+/* ------------------------------------------------------ */
+
+inline Matrix<complex> FFT::computeFrequencies(int size) {
+    Matrix<complex> frequencies(size);
+
+    // Generate wavenumbers: 0, 1, ..., size/2, -size/2+1, ..., -1
+    for (int i = 0; i < size; ++i) {
+        double freq_x = (i <= size / 2) ? i : (i - size);
+        for (int j = 0; j < size; ++j) {
+            double freq_y = (j <= size / 2) ? j : (j - size);
+            frequencies(i, j) = complex(freq_x, freq_y);  // (kx, ky)
+        }
+    }
+
+    return frequencies;
+}
+
+/* ------------------------------------------------------ */
 
 
 #endif  // FFT_HH
