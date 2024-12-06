@@ -13,8 +13,6 @@
 //The checking in these tests are handled by the ASSERT_NEAR statements, which are part of the Google Test framework. 
 //Instead of explicitly using if or else statements, these assertions are designed to validate conditions and automatically handle success or failure.
 
-
-
 TEST(FFT, transform) {
   UInt N = 512;
   Matrix<complex> m(N);
@@ -36,7 +34,7 @@ TEST(FFT, transform) {
     if (std::abs(val) > 1e-10)
       std::cout << i << "," << j << " = " << val << std::endl;
 
-    // Update this line to use the corrected scaling expectation
+    
     if (i == 1 && j == 0)
       ASSERT_NEAR(std::abs(val), (N * N) / 2, 1e-6);
     else if (i == N - 1 && j == 0)
@@ -49,12 +47,12 @@ TEST(FFT, transform) {
 
 
 /*****************************************************************/
-// Test for the inverse FFT transform
+// Test for the inverse FFT transform. The idea is based on the fact that if you take first the fourrier transform of a function and then take inverse fourrier of the result, you should recover the original function.
 TEST(FFT, inverse_transform) {
   UInt N = 128;  // Smaller size for quick validation
   Matrix<complex> m(N);  // Create a square matrix of size N
 
-  // Fill the matrix with a simple cosine function
+  // Filling the matrix with a simple cosine function
   Real k = 2 * M_PI / N;
   for (auto&& entry : index(m)) {
     int i = std::get<0>(entry);
@@ -62,19 +60,19 @@ TEST(FFT, inverse_transform) {
     val = cos(k * i);  // Assign cosine values
   }
 
-  // Perform forward and inverse FFT
+  // Performing forward and inverse FFT
   Matrix<complex> transformed = FFT::transform(m);
   Matrix<complex> result = FFT::itransform(transformed);
 
-  // Validate that the original matrix is reconstructed
+  // Validating that the original matrix is reconstructed
   for (auto&& entry : index(result)) {
     int i = std::get<0>(entry);
     int j = std::get<1>(entry);
     auto& val = std::get<2>(entry);
 
-    // Ensure the reconstructed values match the original
+    // Ensuring the reconstructed values match the original
     ASSERT_NEAR(std::real(val), std::real(m(i, j)), 1e-10);
-    ASSERT_NEAR(std::imag(val), std::imag(m(i, j)), 1e-10);  // Imaginary part
+    ASSERT_NEAR(std::imag(val), std::imag(m(i, j)), 1e-10);  
   }
 }
 
@@ -82,7 +80,7 @@ TEST(FFT, inverse_transform) {
 
 
 
-// Test for frequencies. The python output of frequencies are computed from a separate python script called "generate_reference_frequencies.py"
+// Implementing the test for frequencies. The python output of frequencies are computed from a separate python script called "generate_reference_frequencies.py"
 
 TEST(FFT, computeFrequencies) {
     int N = 8; // Example size for the test
@@ -94,13 +92,16 @@ TEST(FFT, computeFrequencies) {
 
     // Validate frequencies
     int i = 0, j = 0;
-    double ref_freq_x, ref_freq_y;
+    double ref_freq_x, ref_freq_y;  // Variables to hold the x(real) and y(imaginary) components of the reference frequency(the two-dimensional grid of frequencies) read from the file.
+    
     std::string line;
 
-    while (std::getline(reference_file, line)) {
-        std::stringstream ss(line);
+    while (std::getline(reference_file, line)) { // Iterating through Reference Frequencies
+        std::stringstream ss(line);   
         char comma; // For parsing the comma
         ss >> ref_freq_x >> comma >> ref_freq_y;
+
+        // Validating Frequencies
 
         ASSERT_NEAR(std::real(frequencies(i, j)), ref_freq_x, 1e-10);
         ASSERT_NEAR(std::imag(frequencies(i, j)), ref_freq_y, 1e-10);

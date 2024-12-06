@@ -16,19 +16,22 @@ struct FFT {
 
 /* ------------------------------------------------------ */
 
-inline Matrix<complex> FFT::transform(Matrix<complex>& m_in) {
-    UInt rows = m_in.rows();
+inline Matrix<complex> FFT::transform(Matrix<complex>& m_in) { //This code defines the transform function for the FFT struct. The function performs a forward 2D discrete Fourier Transform (DFT) on the input Matrix<complex> using the FFTW library.
+    UInt rows = m_in.rows(); // Determining matrix dimensions.
     UInt cols = m_in.cols();
-    Matrix<complex> m_out(rows);
+    Matrix<complex> m_out(rows); //Constructs an empty output matrix m_out with the same dimensions (rows) as the input matrix. This matrix will store the result of the FFT computation.
 
-    fftw_complex* in = reinterpret_cast<fftw_complex*>(m_in.data());
+
+    // Pointer Conversion.
+    fftw_complex* in = reinterpret_cast<fftw_complex*>(m_in.data()); // This cast is converting the data() pointer from std::complex<double>* (used in the Matrix class) into fftw_complex* (used by the FFTW library).
     fftw_complex* out = reinterpret_cast<fftw_complex*>(m_out.data());
+    
+    // Plan Creation
     fftw_plan plan = fftw_plan_dft_2d(rows, cols, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 
     fftw_execute(plan);
     fftw_destroy_plan(plan);
 
-    // Remove manual normalization (let FFTW handle it)
     return m_out;
 }
 
@@ -40,7 +43,7 @@ inline Matrix<complex> FFT::itransform(Matrix<complex>& m_in) {
     UInt cols = m_in.cols();
     Matrix<complex> m_out(rows);
 
-    fftw_complex* in = reinterpret_cast<fftw_complex*>(m_in.data());
+    fftw_complex* in = reinterpret_cast<fftw_complex*>(m_in.data()); // This cast is converting the data() pointer from std::complex<double>* (used in the Matrix class) into fftw_complex* (used by the FFTW library).
     fftw_complex* out = reinterpret_cast<fftw_complex*>(m_out.data());
     fftw_plan plan = fftw_plan_dft_2d(rows, cols, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
 
