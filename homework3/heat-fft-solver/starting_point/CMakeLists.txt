@@ -1,33 +1,36 @@
-cmake_minimum_required(VERSION 3.1)
-project(Particles)
+cmake_minimum_required (VERSION 3.1)
+project (Particles)
 
+# Set the C++ standard to 14
 set(CMAKE_CXX_STANDARD 14)
 
 ################################################################
-# Options
+# FFTW Option
 ################################################################
-# Option to enable or disable FFTW functionality
-option(ENABLE_FFT "Enable FFTW functionality" ON)
 
-################################################################
-# Find FFTW
-################################################################
-if(ENABLE_FFT)
-  find_path(FFTW3_INCLUDE_DIR fftw3.h PATHS /usr/include /usr/local/include)
-  find_library(FFTW3_LIBRARY NAMES fftw3 PATHS /usr/lib /usr/local/lib)
-  
-  if(FFTW3_INCLUDE_DIR AND FFTW3_LIBRARY)
-    message(STATUS "FFTW3 found")
-    set(FFTW3_LIBRARIES ${FFTW3_LIBRARY})
-    set(FFTW3_INCLUDE_DIRS ${FFTW3_INCLUDE_DIR})
+# Option to enable or disable FFTW support.
+# Use -DUSE_FFTW=ON or -DUSE_FFTW=OFF when running cmake to enable/disable this feature.
+option(USE_FFTW "Enable FFTW support" ON)
+
+# Locate the FFTW library manually
+if(USE_FFTW)
+  find_library(FFTW_LIBRARIES fftw3 REQUIRED)
+  find_path(FFTW_INCLUDES fftw3.h REQUIRED)
+
+  if(FFTW_LIBRARIES AND FFTW_INCLUDES)
+    message(STATUS "FFTW library found: ${FFTW_LIBRARIES}")
+    message(STATUS "FFTW includes found: ${FFTW_INCLUDES}")
+    include_directories(${FFTW_INCLUDES})
   else()
-    message(FATAL_ERROR "FFTW3 not found! Install it using `sudo apt install libfftw3-dev`.")
+    message(FATAL_ERROR "FFTW library or includes not found. Ensure FFTW is installed.")
   endif()
 endif()
 
 ################################################################
 # libpart
 ################################################################
+
+# Create a library named 'part' from the provided source files
 add_library(part
   compute_boundary.cc
   compute_verlet_integration.cc 
@@ -50,36 +53,60 @@ add_library(part
   compute_interaction.cc
   compute_temperature.cc
   material_points_factory.cc 
-)
+  )
 
-# Add FFTW dependencies to the library if enabled
-if(ENABLE_FFT)
-  target_include_directories(part PUBLIC ${FFTW3_INCLUDE_DIRS})
-  target_link_libraries(part PUBLIC ${FFTW3_LIBRARIES})
-endif()
-
-################################################################
-# Executables
-################################################################
+# Add an executable named 'particles' using main.cc
 add_executable(particles main.cc)
+
+# Link the 'particles' executable with the required libraries
 target_link_libraries(particles gtest_main gtest pthread part)
 
+################################################################
+# Tests Setup
+################################################################
+
 if(EXISTS "${PROJECT_SOURCE_DIR}/googletest/CMakeLists.txt")
+  # Add the googletest subdirectory
   add_subdirectory(googletest)
 
+  # Create test executables for test_kepler and test_fft
   add_executable(test_kepler test_kepler.cc)
   add_executable(test_fft test_fft.cc)
 
-  target_link_libraries(test_kepler part gtest_main gtest pthread)
+  # Link FFTW to test_fft only if FFTW support is enabled
+if(USE_FFTW)
+  # Find the FFTW library
+  find_library(FFTW_LIBRARIES fftw3 REQUIRED)
+  find_path(FFTW_INCLUDES fftw3.h REQUIRED)
 
-  if(ENABLE_FFT)
-    target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW3_LIBRARIES})
+  # Ensure FFTW is found
+  if(FFTW_LIBRARIES AND FFTW_INCLUDES)
+    message(STATUS "FFTW library found: ${FFTW_LIBRARIES}")
+    message(STATUS "FFTW includes found: ${FFTW_INCLUDES}")
+    include_directories(${FFTW_INCLUDES})
   else()
-    target_link_libraries(test_fft part gtest_main gtest pthread)
+    message(FATAL_ERROR "FFTW library or includes not found. Ensure FFTW is installed.")
   endif()
 
+  # Add the test_fft target and link FFTW
+  target_link_libraries(test_fft part gtest_main gtest pthread ${FFTW_LIBRARIES})
+  target_compile_definitions(test_fft PUBLIC USE_FFTW)
+else()
+  # Add test_fft without FFTW if FFTW is disabled
+  target_link_libraries(test_fft part gtest_main gtest pthread)
+endif()
+  
+  
+  
+  
+
+  # Link the 'test_kepler' executable with necessary libraries
+  target_link_libraries(test_kepler part gtest_main gtest pthread)
+
+  # Create a custom target to run all tests
   add_custom_target(test ./test_kepler && ./test_fft DEPENDS part test_kepler test_fft)
 else()
+  # If googletest is missing, notify the user with a message
   message("
 *********************************************
 google tests is missing. 
@@ -92,16 +119,20 @@ endif()
 ################################################################
 # Doxygen
 ################################################################
+
+# Setup Doxygen for generating documentation
 find_package(Doxygen)
-if(DOXYGEN_FOUND)
-  # to set other options, read: https://cmake.org/cmake/help/v3.9/module/FindDoxygen.html
+if (DOXYGEN_FOUND)
+
+  # Exclude the googletest directory from the documentation
   set(DOXYGEN_EXCLUDE_PATTERNS */googletest/*)
 
+  # Configure and add a target for Doxygen documentation
   doxygen_add_docs(
     doxygen
     ${PROJECT_SOURCE_DIR}
     COMMENT "Generate html pages"
-  )
+    )
   add_custom_target(doc DEPENDS doxygen)
 endif(DOXYGEN_FOUND)
 

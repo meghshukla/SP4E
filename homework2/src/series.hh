@@ -69,7 +69,7 @@ public:
 
 class RiemannIntegral : public Series {
 public:
-    RiemannIntegral(double a, double b, std::function<double(double)> f, unsigned int N);
+    RiemannIntegral(double a, double b, std::function<double(double)> f, unsigned int N); 
     double compute(unsigned int N) override;
     double computeSeries(unsigned int N) override;
 

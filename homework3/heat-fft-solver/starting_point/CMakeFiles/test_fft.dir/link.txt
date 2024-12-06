@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/test_fft.dir/test_fft.cc.o -o test_fft  libpart.a lib/libgtest_main.a lib/libgtest.a -lpthread -lfftw3 
