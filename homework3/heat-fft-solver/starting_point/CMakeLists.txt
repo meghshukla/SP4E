@@ -59,7 +59,7 @@ add_library(part
 add_executable(particles main.cc)
 
 # Link the 'particles' executable with the required libraries
-target_link_libraries(particles gtest_main gtest pthread part)
+target_link_libraries(particles gtest_main gtest pthread part ${FFTW_LIBRARIES})
 
 ################################################################
 # Tests Setup

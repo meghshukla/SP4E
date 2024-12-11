@@ -1,0 +1,6 @@
+<map id="ComputePotentialEnergy" name="ComputePotentialEnergy">
+<area shape="rect" id="node1" title="Compute potential energy of system." alt="" coords="57,171,241,197"/>
+<area shape="rect" id="node2" href="$class_compute_energy.html" title="Base class for energy computation." alt="" coords="5,81,132,108"/>
+<area shape="rect" id="node3" href="$class_compute.html" title="Base class for all compute." alt="" coords="108,5,189,32"/>
+<area shape="rect" id="node4" href="$class_compute_interaction.html" title="Base class for interaction computation." alt="" coords="156,81,307,108"/>
+</map>

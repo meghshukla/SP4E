@@ -21,7 +21,6 @@ inline Matrix<complex> FFT::transform(Matrix<complex>& m_in) { //This code defin
     UInt cols = m_in.cols();
     Matrix<complex> m_out(rows); //Constructs an empty output matrix m_out with the same dimensions (rows) as the input matrix. This matrix will store the result of the FFT computation.
 
-
     // Pointer Conversion.
     fftw_complex* in = reinterpret_cast<fftw_complex*>(m_in.data()); // This cast is converting the data() pointer from std::complex<double>* (used in the Matrix class) into fftw_complex* (used by the FFTW library).
     fftw_complex* out = reinterpret_cast<fftw_complex*>(m_out.data());

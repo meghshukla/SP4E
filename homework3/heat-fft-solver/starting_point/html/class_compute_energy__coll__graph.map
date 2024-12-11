@@ -1,0 +1,4 @@
+<map id="ComputeEnergy" name="ComputeEnergy">
+<area shape="rect" id="node1" title="Base class for energy computation." alt="" coords="5,80,132,107"/>
+<area shape="rect" id="node2" href="$class_compute.html" title="Base class for all compute." alt="" coords="28,5,109,32"/>
+</map>

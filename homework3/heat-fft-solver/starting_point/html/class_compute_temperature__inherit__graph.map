@@ -1,0 +1,4 @@
+<map id="ComputeTemperature" name="ComputeTemperature">
+<area shape="rect" id="node1" title="Compute contact interaction between ping&#45;pong balls." alt="" coords="5,80,168,107"/>
+<area shape="rect" id="node2" href="$class_compute.html" title="Base class for all compute." alt="" coords="46,5,127,32"/>
+</map>

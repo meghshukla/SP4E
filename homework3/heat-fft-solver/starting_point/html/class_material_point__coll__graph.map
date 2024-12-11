@@ -1,0 +1,5 @@
+<map id="MaterialPoint" name="MaterialPoint">
+<area shape="rect" id="node1" title="Class for MaterialPoint." alt="" coords="5,200,115,227"/>
+<area shape="rect" id="node2" href="$class_particle.html" title="Particle base class." alt="" coords="25,124,95,151"/>
+<area shape="rect" id="node3" href="$class_vector.html" title="3D Vector class" alt="" coords="28,5,92,32"/>
+</map>

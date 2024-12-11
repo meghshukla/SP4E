@@ -1,0 +1,4 @@
+<map id="MaterialPointsFactory" name="MaterialPointsFactory">
+<area shape="rect" id="node1" title="Factory for material points." alt="" coords="15,81,179,108"/>
+<area shape="rect" id="node2" href="$class_particles_factory_interface.html" title="Abstract factory defining interface." alt="" coords="5,5,189,32"/>
+</map>

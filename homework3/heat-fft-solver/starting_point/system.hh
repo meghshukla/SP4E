@@ -4,6 +4,7 @@
 /* -------------------------------------------------------------------------- */
 #include "my_types.hh"
 #include "particle.hh"
+#include "matrix.hh"
 #include <memory>
 #include <vector>
 /* -------------------------------------------------------------------------- */
@@ -38,6 +39,19 @@ public:
 public:
   auto begin() { return iterator(list_particles.begin()); }
   auto end() { return iterator(list_particles.end()); }
+
+public:
+  // Getter and setter for temperature_field
+  Matrix<complex>* getTemperatureField() const;
+  void setTemperatureField(Matrix<complex>* temperature_field);
+
+  // Getter and setter for heat_source
+  Matrix<complex>* getHeatSource() const;
+  void setHeatSource(Matrix<complex>* heat_source);
+
+private:
+  Matrix<complex>* temperature_field;
+  Matrix<complex>* heat_source;
 
 protected:
   ParticleList list_particles;

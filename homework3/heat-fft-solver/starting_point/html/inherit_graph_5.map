@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_particle.html" title="Particle base class." alt="" coords="5,56,76,83"/>
+<area shape="rect" id="node2" href="$class_material_point.html" title="Class for MaterialPoint." alt="" coords="124,5,233,32"/>
+<area shape="rect" id="node3" href="$class_ping_pong_ball.html" title="Class for ping&#45;pong ball." alt="" coords="125,56,232,83"/>
+<area shape="rect" id="node4" href="$class_planet.html" title="Class for planet." alt="" coords="147,107,210,133"/>
+</map>

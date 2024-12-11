@@ -4,6 +4,7 @@
 /* -------------------------------------------------------------------------- */
 #include "compute.hh"
 #include "system.hh"
+#include "matrix.hh"
 /* -------------------------------------------------------------------------- */
 
 //! Manager for system evolution
@@ -28,6 +29,10 @@ public:
 
   void setNSteps(UInt nsteps);
   void setDumpFreq(UInt freq);
+  void setHeatSource(std::string source);
+  void setTemperatureField();
+  void copyTemperatureField();
+  Matrix<complex>* getOriginalField();
 
   /* ------------------------------------------------------------------------ */
   /* Members                                                                  */
@@ -36,6 +41,10 @@ protected:
   std::vector<std::shared_ptr<Compute>> computes;
   std::unique_ptr<System> system;
   UInt nsteps, freq;
+  Matrix<complex>* heat_source;
+  Matrix<complex>* temperature_field;
+  Matrix<complex>* original_field;
+  int size_field;
 };
 
 /* -------------------------------------------------------------------------- */

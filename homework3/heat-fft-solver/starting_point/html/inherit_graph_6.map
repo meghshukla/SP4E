@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_particles_factory_interface.html" title="Abstract factory defining interface." alt="" coords="5,56,189,83"/>
+<area shape="rect" id="node2" href="$class_material_points_factory.html" title="Factory for material points." alt="" coords="237,5,401,32"/>
+<area shape="rect" id="node3" href="$class_ping_pong_balls_factory.html" title="Factory for ping&#45;pong balls." alt="" coords="238,56,401,83"/>
+<area shape="rect" id="node4" href="$class_planets_factory.html" title="Factory for planet simulations." alt="" coords="260,107,379,133"/>
+</map>

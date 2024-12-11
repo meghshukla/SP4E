@@ -35,7 +35,7 @@ struct Matrix {
   UInt size() { return std::sqrt(storage.size()); };
 
   void resize(UInt size) { storage.resize(size * size); }
-  T& operator()(UInt i, UInt j) { return storage[j * this->size() + i]; }
+  T& operator()(UInt i, UInt j) { return storage[i * this->size() + j]; }
 
   Matrix& operator/=(const T& c) {
     std::for_each(storage.begin(), storage.end(), [&c](auto& v) { v /= c; });
@@ -63,8 +63,8 @@ struct MatrixIndexIterator : public MatrixIterator<T> {
 
   std::tuple<UInt, UInt, T&> operator*() {
 
-    int i = this->index % this->size;
-    int j = this->index / this->size;
+    int i = this->index / this->size;
+    int j = this->index % this->size;
     return std::tuple<UInt, UInt, T&>(i, j, this->ptr[this->index]);
   };
 };

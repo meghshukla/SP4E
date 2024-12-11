@@ -1,0 +1,6 @@
+<map id="ParticlesFactoryInterface" name="ParticlesFactoryInterface">
+<area shape="rect" id="node1" title="Abstract factory defining interface." alt="" coords="183,5,367,32"/>
+<area shape="rect" id="node2" href="$class_material_points_factory.html" title="Factory for material points." alt="" coords="5,80,169,107"/>
+<area shape="rect" id="node3" href="$class_ping_pong_balls_factory.html" title="Factory for ping&#45;pong balls." alt="" coords="194,80,357,107"/>
+<area shape="rect" id="node4" href="$class_planets_factory.html" title="Factory for planet simulations." alt="" coords="381,80,500,107"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Planet" name="Planet">
+<area shape="rect" id="node1" title="Class for planet." alt="" coords="9,80,72,107"/>
+<area shape="rect" id="node2" href="$class_particle.html" title="Particle base class." alt="" coords="5,5,76,32"/>
+</map>
