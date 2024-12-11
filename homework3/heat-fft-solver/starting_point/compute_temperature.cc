@@ -16,6 +16,8 @@ void ComputeTemperature::compute(System& system) {
     Matrix<complex> temp_F = FFT::transform(*temperature_field);
     Matrix<complex> heat_F = FFT::transform(*heat_source);
 
+    double timestep = system.timestep;
+
     for (unsigned int i = 0; i < temperature_field->size(); i++) {
         for (unsigned int j = 0; j < temperature_field->size(); j++) {
             double q_x2 = frequencies(i, j).real();
@@ -34,18 +36,9 @@ void ComputeTemperature::compute(System& system) {
 
     for (unsigned int i = 0; i < temperature_field->size(); i++) {
         for (unsigned int j = 0; j < temperature_field->size(); j++) {
-            (*temperature_field)(i, j) += (0.001 * derivative(i, j));
+            (*temperature_field)(i, j) += (timestep * derivative(i, j));
         }
     }
-
-    // Print values of temperature_field
-    for (unsigned int i = 0; i < temperature_field->size(); i++) {
-        for (unsigned int j = 0; j < temperature_field->size(); j++) {
-            std::cout << (*temperature_field)(i, j) << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl << std::endl << std::endl;
     /*
     for (auto&& entry : index(frequencies)) {
         int i = std::get<0>(entry);

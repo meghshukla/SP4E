@@ -27,6 +27,8 @@ public:
   //! Get number of particles
   UInt getNbParticles();
 
+  double timestep;
+
   //! Iterator class to erase the unique pointer on Particle
   struct iterator : ParticleList::iterator {
     iterator(const ParticleList::iterator& it) : ParticleList::iterator(it) {}

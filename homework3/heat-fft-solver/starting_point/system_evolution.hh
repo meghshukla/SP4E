@@ -32,6 +32,7 @@ public:
   void setHeatSource(std::string source);
   void setTemperatureField();
   void copyTemperatureField();
+  void setTimeStep();
   Matrix<complex>* getOriginalField();
 
   /* ------------------------------------------------------------------------ */
@@ -45,6 +46,10 @@ protected:
   Matrix<complex>* temperature_field;
   Matrix<complex>* original_field;
   int size_field;
+
+public:
+  double timestep;
+
 };
 
 /* -------------------------------------------------------------------------- */

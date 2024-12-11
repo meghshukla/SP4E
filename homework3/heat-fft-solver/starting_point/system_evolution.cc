@@ -22,6 +22,17 @@ void SystemEvolution::evolve() {
       sstr << "dumps/step-" << std::setfill('0') << std::setw(5) << i << ".csv";
       CsvWriter dumper(sstr.str());
       dumper.write(*system);
+
+      // Print values of temperature_field
+      for (unsigned int i = 0; i < temperature_field->size(); i++) {
+          for (unsigned int j = 0; j < temperature_field->size(); j++) {
+              std::cout << (*temperature_field)(i, j) << " ";
+          }
+          std::cout << std::endl;
+      }
+      std::cout << std::endl << std::endl << std::endl;
+
+
     }
   }
 }
@@ -97,6 +108,10 @@ void SystemEvolution::copyTemperatureField() {
       (*original_field)(i, j) = (*temperature_field)(i, j);
     }
   }
+}
+
+void SystemEvolution::setTimeStep() {
+  system->timestep = timestep;
 }
 
 Matrix<complex>* SystemEvolution::getOriginalField() {

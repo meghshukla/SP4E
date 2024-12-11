@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
   evol.setTemperatureField();
   evol.setHeatSource(source);
   evol.copyTemperatureField();
+  evol.setTimeStep();
   
   evol.evolve();
 

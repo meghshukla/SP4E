@@ -31,6 +31,7 @@ MaterialPointsFactory::createSimulation(const std::string& fname,
 
   auto temperature = std::make_shared<ComputeTemperature>();
   this->system_evolution->addCompute(temperature);
+  this->system_evolution->timestep = timestep;
 
   return *system_evolution;
 }
