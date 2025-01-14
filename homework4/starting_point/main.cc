@@ -88,6 +88,36 @@ int main(int argc, char** argv) {
 
     return EXIT_SUCCESS;
   }
+  
+
+  // Testing the Linear System Solver 
+
+  if (argc == 7 && std::string(argv[6]) == "test_solve") {
+    UInt N = 2; // Grid size
+
+    // Create a ComputeTemperature instance
+    ComputeTemperature computeTemp;
+    computeTemp.getDeltat() = 0.1;
+    computeTemp.getConductivity() = 1.0;
+    computeTemp.getDensity() = 1.0;
+    computeTemp.getCapacity() = 1.0;
+    computeTemp.getL() = 1.0;
+
+    // Assemble the matrix A
+    Eigen::SparseMatrix<double> A = computeTemp.assembleMatrix(N);
+
+    // Create a mock RHS vector b
+    Eigen::VectorXd b(N * N);
+    b << 1.0, 2.0, 3.0, 4.0; // Example values
+
+    // Solve the system A * x = b
+    Eigen::VectorXd x = computeTemp.solveSystem(A, b);
+
+    // Print the solution
+    std::cout << "Solution x:\n" << x << std::endl;
+
+    return EXIT_SUCCESS;
+}
 
 
 

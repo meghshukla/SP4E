@@ -3,6 +3,7 @@
 #include "material_point.hh"
 #include <Eigen/Dense>
 #include <Eigen/SparseCore>
+#include <Eigen/SparseLU>
 #include <stdexcept>
 #include <iostream>
 #include <cmath>
@@ -92,6 +93,44 @@ Eigen::SparseMatrix<double> ComputeTemperature::assembleMatrix(UInt N) {
 
     return A;
 }
+
+
+// Solve the system A * x = b using SparseLU
+Eigen::VectorXd ComputeTemperature::solveSystem(const Eigen::SparseMatrix<double>& A, const Eigen::VectorXd& b) {
+    // Ensure the matrix is compressed for SparseLU
+    Eigen::SparseMatrix<double> A_compressed = A;
+    A_compressed.makeCompressed();
+
+    // Create the SparseLU solver
+    Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
+
+    // Analyze and factorize the matrix
+    solver.analyzePattern(A_compressed);
+    solver.factorize(A_compressed);
+
+    // Check if the decomposition was successful
+    if (solver.info() != Eigen::Success) {
+        throw std::runtime_error("SparseLU decomposition failed");
+    }
+
+    // Solve the system
+    Eigen::VectorXd x = solver.solve(b);
+
+    // Check if the solving was successful
+    if (solver.info() != Eigen::Success) {
+        throw std::runtime_error("SparseLU solving failed");
+    }
+
+    return x;
+}
+
+
+
+
+
+
+
+
 
 // Compute the temperature evolution
 void ComputeTemperature::compute(System& system) {

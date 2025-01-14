@@ -18,6 +18,10 @@ public:
   // Assemble the Matrix of the heat equation
   Eigen::SparseMatrix<double> assembleMatrix(UInt N);
 
+  // Solve the sparse system of equations.
+  Eigen::VectorXd solveSystem(const Eigen::SparseMatrix<double>& A, const Eigen::VectorXd& b);
+
+
   //! Return the heat conductivity
   Real& getConductivity() { return conductivity; };
   //! Return the heat capacity
