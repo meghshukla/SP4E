@@ -68,3 +68,11 @@ This requires using ```py::return_value_policy::reference``` or value. Managing 
 
 The only binding required was for ```CsvWriter```. 
 
+### Exercise 6
+
+The python files of simulation_utils.py and optimize_velocity.py have been created to perform the necessary computations for the computation of the error for a given scaling factor of the velocity of Mercury and to minimse/optimize that error function. However, there was a mismatch between the Python versions for the Compute,Factory and csv bindings because of which we could not continue.
+
+### Exercise 7,8,9
+
+We have implemented the code for these tasks as can be seen in simulation_utils.py and optimize_velocity.py but we could not verify due to previously mentioned mismatch.
+
