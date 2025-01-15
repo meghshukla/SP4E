@@ -5,6 +5,7 @@
 void ComputeTemperatureFiniteDifferences::compute(System& system) {
 
   if (should_factorize) {
+
     assembleLinearOperator(system);
     A.makeCompressed();
     solver->analyzePattern(A);
@@ -18,6 +19,7 @@ void ComputeTemperatureFiniteDifferences::compute(System& system) {
   Eigen::VectorXd theta(N);
 
   assembleRightHandSide(system);
+
   theta = solver->solve(rhs);
 
   // Transferring temperature back
@@ -31,10 +33,8 @@ void ComputeTemperatureFiniteDifferences::compute(System& system) {
 void ComputeTemperatureFiniteDifferences::assembleLinearOperator(
     System& system) {
     
-    auto N = system.getNbParticles();
-
-    // Number of grid points
-    UInt numPoints = N * N;
+    UInt numPoints = system.getNbParticles();
+    UInt N = std::sqrt(numPoints);
 
     A.resize(numPoints, numPoints);
     

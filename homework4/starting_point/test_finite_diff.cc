@@ -39,7 +39,6 @@ System createSystem(UInt N, F1 temperature_functor, F2 heat_source_functor) {
 TEST(ComputeTemperatureFiniteDifferences, heat_source_lines) {
   auto& factory = MaterialPointsFactory::getInstance();
   UInt N = 256;
-
   auto system = createSystem(
       N,
       [](UInt i, UInt j, auto& pos) {
