@@ -10,6 +10,7 @@ public:
   //! Apply a functor on all particle pairs
   template <typename Functor>
   void applyOnPairs(Functor func, System& system);
+  void compute(System& system) override {}
 };
 
 /* -------------------------------------------------------------------------- */
