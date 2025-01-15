@@ -3,8 +3,8 @@ import pybind11
 
 # Define the extension module
 csv_writer_bindings_module = Extension(
-    'csv_writer',                 # Module name in Python
-    sources=['csv_bindings.cpp'],  # Source files
+    'PyCSV',                 # Module name in Python
+    sources=['csv_bindings.cpp', 'csv_writer.cc', 'system.cc'],  # Source files
     include_dirs=[pybind11.get_include(),
                   './eigen',
                   './'], # Include pybind11 headers
@@ -15,7 +15,7 @@ csv_writer_bindings_module = Extension(
 
 # Build the module
 setup(
-    name='csv_writer',
+    name='PyCSV',
     version='0.1',
     ext_modules=[csv_writer_bindings_module],
 )
