@@ -1,20 +1,3 @@
-Ex. 4: 
-compute_interaction.hh, compute_bindings.cpp, compute_bindings.hh, setup_compute.py
-python setup_compute.py build_ext --inplace
-Generated file: compute.cpython-39-x86_64-linux-gnu.so
-
-Ex. 3:
-factory_bindings.hh, factory_bindings.cpp, setup_factory.py
-python setup_factory.py build_ext --inplace
-Generated file: factory.cpython-39-x86_64-linux-gnu.so
-
-Ex. 5:
-csv_bindings.hh, csv_bindings.cpp, setup_csv.py
-python setup_csv.py build_ext --inplace
-Generated file: csv_writer.cpython-39-x86_64-linux-gnu.so
-
-
-
 # SP4E: Homework 4
 
 C++ and Python: Eigen and PyBind
@@ -64,7 +47,7 @@ Additionally, we used ```setuptools``` in Python to bind C++ to Python code. We 
 
 2. ```compute_bindings.cc / factory_bindings.cc / csv_bindings.cc```: These files contained the actual binding logic for all the classes needed.
 
-3. ```setup_compute.py / setup_factory.py / setup_csv.py```: These files used the Python interface of PyBind to do the binding. This required specifying various source files, libraries and module name.
+3. ```setup_compute.py / setup_factory.py / setup_csv.py```: These files used the Python interface of PyBind to do the binding. This required specifying various source files, libraries and module name. Example script to run: ```python setup_compute.py build_ext --inplace```
 
 4. ```PyCompute.cpython-39-x86_64-linux-gnu.so AND PyCSV.cpython-39-x86_64-linux-gnu.so AND PyFactory.cpython-39-x86_64-linux-gnu.so```: These files are Python modules containing the C++ objects. We import this in ```main.py``` using ```import PyCompute, PyCSV, PyFactory```.
 
