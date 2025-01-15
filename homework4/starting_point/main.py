@@ -2,12 +2,12 @@
 
 import sys
 import argparse
-from factory import MaterialPointsFactory, ParticlesFactoryInterface
-from factory import PingPongBallsFactory, PlanetsFactory
+from PyFactory import MaterialPointsFactory, ParticlesFactoryInterface
+from PyFactory import PingPongBallsFactory, PlanetsFactory
 from PyCSV import CsvWriter
-from compute import ComputeTemperature
-from compute import ComputeGravity
-from compute import ComputeVerletIntegration
+from PyCompute import ComputeTemperature
+from PyCompute import ComputeGravity
+from PyCompute import ComputeVerletIntegration
 
 
 def main(nsteps, freq, filename, particle_type, timestep):
