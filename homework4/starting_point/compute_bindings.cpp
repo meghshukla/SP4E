@@ -32,6 +32,6 @@ void init_bindings(py::module &m) {
         .def("addInteraction", &ComputeVerletIntegration::addInteraction);
 }
 
-PYBIND11_MODULE(compute, m) {
+PYBIND11_MODULE(PyCompute, m) {
     init_bindings(m);
 }
