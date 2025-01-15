@@ -28,6 +28,6 @@ void init_bindings(py::module &m) {
         .def("createParticle", &PingPongBallsFactory::createParticle);
 }
 
-PYBIND11_MODULE(bindings, m) {
+PYBIND11_MODULE(PyFactory, m) {
     init_bindings(m);
 }
